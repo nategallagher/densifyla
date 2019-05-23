@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DensifyLA</title>
+
+  <link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+
+</head>
+<body>
+
+  <div class="d-flex flex-column justify-content-center align-items-center">
+    <h1>Densify LA</h1>
+    <form method="post" action="/">
+      <div class="d-inline-flex mb-3">
+        <label class="mx-1 my-auto" for="address">Enter address & </label>
+        <input class="mx-1 my-auto" type="text" name="address" id="address">
+        <button class="btn btn-sm btn-outline-primary mx-1 my-auto" type="submit">Go!</button>
+      </div>
+    </form>
+    <img class="m-3" src="../static/images/Los+Angeles+Wallpapers+3.jpg" style="height: 250px; width: auto;">
+
+    <table class="table table-striped w-50">
+      <tr>
+        <th>Address</th>
+        <th>Date Entered</th>
+        <th>Actions</th>
+      </tr>
+      {% for addr in items %}
+      <tr>
+        <td>
+          {{ addr.address }}
+        </td>
+        <td>
+          {{ addr.date }}
+        </td>
+        <td>
+          <a href="/{{ addr.report_folder }}">Download</a>
+          <a class="mx-2" href="/{{ addr.report_folder }}/delete">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+
+    </table>
+
+    <footer class="my-3">
+      &copy; 2019
+    </footer>
+
+  </div>
+
+
+  <script src="../static/bootstrap-4.3.1-dist/js/bootstrap.bundle.js"></script>
+
+</body>
+</html>
