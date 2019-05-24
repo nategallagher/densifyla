@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>DensifyLA</title>
 
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
   <link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
 
 </head>
@@ -11,14 +13,14 @@
 
   <div class="d-flex flex-column justify-content-center align-items-center">
     <h1>Densify LA</h1>
-    <form method="post" action="/">
-      <div class="d-inline-flex mb-3">
+    <form class="mb-2" method="post" action="/">
+      <div class="d-inline-flex">
         <label class="mx-1 my-auto" for="address">Enter address & </label>
         <input class="mx-1 my-auto" type="text" name="address" id="address">
         <button class="btn btn-sm btn-outline-primary mx-1 my-auto" type="submit">Go!</button>
       </div>
     </form>
-    <img class="m-3" src="../static/images/Los+Angeles+Wallpapers+3.jpg" style="height: 250px; width: auto;">
+    <img class="mb-2" src="../static/images/Los+Angeles+Wallpapers+3.jpg" style="height: 250px; width: auto;">
 
     <table class="table table-striped w-50">
       <tr>
@@ -26,7 +28,7 @@
         <th>Date Entered</th>
         <th>Actions</th>
       </tr>
-      {% for addr in items %}
+      {% for addr in page_object.items %}
       <tr>
         <td>
           {{ addr.address }}
@@ -36,10 +38,31 @@
         </td>
         <td>
           <a href="/{{ addr.report_folder }}">Download</a>
-          <a class="mx-2" href="/{{ addr.report_folder }}/delete">Delete</a>
         </td>
       </tr>
       {% endfor %}
+      <tfoot>
+        <tr>
+          <td>
+            <i class="fa fa-fast-backward my-auto mx-1" aria-hidden="true"></i>
+            <i class="fa fa-step-backward my-auto mx-1" aria-hidden="true"></i>
+          </td>
+          <td>
+            <div class="d-flex justify-content-center align-items-center">
+              Page {{ page_object.page }} of {{ page_object.pages }}. {{ page_object.total }} items total.
+            </div>
+          </td>
+          <td>
+            <div class="d-flex w-100 justify-content-between">
+              <div></div>
+              <div>
+                <i class="fa fa-step-forward my-auto mx-1" aria-hidden="true"></i>
+                <i class="fa fa-fast-forward my-auto mx-1" aria-hidden="true"></i>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
 
     </table>
 

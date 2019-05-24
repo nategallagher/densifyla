@@ -23,7 +23,7 @@ def index():
 
     page_object = Address().query.paginate(max_per_page=10)
 
-    return render_template("index.html", items=page_object.items)
+    return render_template("index.html", page_object=page_object)
 
 
 @app.route('/report')
