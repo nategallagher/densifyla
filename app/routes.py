@@ -1,4 +1,4 @@
-from flask import request, render_template
+from flask import request, render_template, send_from_directory, redirect
 from werkzeug.utils import secure_filename
 
 from app import app, db
@@ -21,21 +21,21 @@ def index():
         db.session.add(addr)
         db.session.commit()
 
-    page_object = Address().query.paginate(max_per_page=10)
+    page = int(request.args.get('page', 1))
+    page_object = Address().query.paginate(max_per_page=10, page=page)
 
     return render_template("index.html", page_object=page_object)
 
 
-@app.route('/report')
-def report():
-    """
-    API route for feasability report.
+@app.route('/download/<filename>')
+def download(filename):
+    return send_from_directory(app.config['ADDRESS_FOLDER'], filename)
 
-    Returns:
-        feasibility report pdf
-    """
-    address = request.args.get('address', None)
-    # store address
-    # once grasshopper processes code
-    #
-    return "The address requested was: {}".format(address)
+
+@app.route('/delete/<address_id>')
+def delete(address_id):
+    addr = Address().query.filter_by(id=address_id).first()
+    os.remove(addr.address_folder)
+    db.session.delete(addr)
+    db.session.commit()
+    return redirect('/')

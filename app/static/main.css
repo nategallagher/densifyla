@@ -1,0 +1,24 @@
+a.disable-link-colors:link {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.disable-link-colors:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.disable-link-colors:visited{
+  color: inherit;
+  text-decoration: none;
+}
+
+a.disable-link-colors:active{
+  color: inherit;
+  text-decoration: none;
+}
+
+a.disable-link-colors {
+  color: inherit;
+  text-decoration: none;
+}

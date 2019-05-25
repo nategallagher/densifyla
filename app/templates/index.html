@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
         integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
   <link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/main.css">
 
 </head>
 <body>
@@ -37,27 +38,36 @@
           {{ addr.date }}
         </td>
         <td>
-          <a href="/{{ addr.report_folder }}">Download</a>
+          <a href="/download/{{ addr.address_folder.split("\\")[-1] }}">Download</a>
+          <a href="/delete/{{ addr.id }}">Delete</a>
         </td>
       </tr>
       {% endfor %}
       <tfoot>
         <tr>
           <td>
-            <i class="fa fa-fast-backward my-auto mx-1" aria-hidden="true"></i>
-            <i class="fa fa-step-backward my-auto mx-1" aria-hidden="true"></i>
+            <a href="{{ "/?page=1" if page_object.pages }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to beginning">
+              <i class="fa fa-fast-backward my-auto mx-1" aria-hidden="true"></i>
+            </a>
+            <a href="{{ "/?page={}".format(page_object.page - 1) if page_object.has_prev }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to previous page">
+              <i class="fa fa-step-backward my-auto mx-1" aria-hidden="true"></i>
+            </a>
           </td>
           <td>
             <div class="d-flex justify-content-center align-items-center">
-              Page {{ page_object.page }} of {{ page_object.pages }}. {{ page_object.total }} items total.
+              Page {{ page_object.page if page_object.pages else 0 }} of {{ page_object.pages }}. {{ page_object.total }} items total.
             </div>
           </td>
           <td>
             <div class="d-flex w-100 justify-content-between">
               <div></div>
               <div>
-                <i class="fa fa-step-forward my-auto mx-1" aria-hidden="true"></i>
-                <i class="fa fa-fast-forward my-auto mx-1" aria-hidden="true"></i>
+                <a href="{{ "/?page={}".format(page_object.page + 1) if page_object.has_next }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to next page">
+                  <i class="fa fa-step-forward my-auto mx-1" aria-hidden="true" ></i>
+                </a>
+                <a href="{{ "/?page={}".format(page_object.pages) if page_object.pages }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to end">
+                  <i class="fa fa-fast-forward my-auto mx-1" aria-hidden="true"></i>
+                </a>
               </div>
             </div>
           </td>
@@ -69,10 +79,7 @@
     <footer class="my-3">
       &copy; 2019
     </footer>
-
   </div>
-
-
   <script src="../static/bootstrap-4.3.1-dist/js/bootstrap.bundle.js"></script>
 
 </body>
