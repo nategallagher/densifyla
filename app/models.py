@@ -6,7 +6,7 @@ class Address(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    address = db.Column(db.String(140), index=True, nullable=False)
+    address = db.Column(db.String(140), index=True, unique=True, nullable=False)
     date = db.Column(db.DateTime, index=True, default=datetime.utcnow())
 
     report_folder = db.Column(db.String(140))
