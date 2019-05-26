@@ -1,0 +1,11 @@
+.flaskenv
+.idea/
+venv/
+__pycache__/
+app/__pycache__/
+
+
+addresses/
+reports/
+app.db
+
