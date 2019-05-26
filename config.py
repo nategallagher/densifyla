@@ -12,3 +12,7 @@ class Config:
     REPORT_FOLDER = os.environ.get('REPORT_FOLDER') or os.path.abspath("./reports")
 
 
+class Production(Config):
+    SECRET_KEY = b'\t\xcb\xe1\x95\xc9Q\x81(\xfeX\x95\xac,\xc0"Khk\x03\xc3\xed;\xeaI'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://densifyla:densifyla@localhost:5432/densifyla'
+
