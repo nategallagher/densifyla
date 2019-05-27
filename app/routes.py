@@ -11,12 +11,17 @@ import os
 def index():
     if request.method == 'POST':
         addr = Address(address=request.form['address'])
-        addr.report_folder = os.path.join(app.config['REPORT_FOLDER'], secure_filename(addr.address))
+        addr.report_folder = os.path.join(app.config['REPORT_FOLDER'], secure_filename(addr.address) + ".pdf")
         addr.address_folder = os.path.join(app.config['ADDRESS_FOLDER'], secure_filename(addr.address))
 
         txt_file = open(addr.address_folder, "w")
         txt_file.write(addr.address)
         txt_file.close()
+
+        if app.config['DEBUG']:
+            pdf_file = open(addr.report_folder, "w")
+            pdf_file.write(addr.address)
+            pdf_file.close()
 
         db.session.add(addr)
         db.session.commit()
@@ -27,15 +32,22 @@ def index():
     return render_template("index.html", page_object=page_object)
 
 
-@app.route('/download/<filename>')
-def download(filename):
-    return send_from_directory(app.config['ADDRESS_FOLDER'], filename)
+@app.route('/download/<file>')
+def download(file):
+    return send_from_directory(app.config['REPORT_FOLDER'], file)
 
 
 @app.route('/delete/<address_id>')
 def delete(address_id):
     addr = Address().query.filter_by(id=address_id).first()
-    os.remove(addr.address_folder)
+    try:
+        os.remove(addr.address_folder)
+    except FileNotFoundError:
+        pass
+    try:
+        os.remove(addr.report_folder)
+    except FileNotFoundError:
+        pass
     db.session.delete(addr)
     db.session.commit()
     return redirect('/')
