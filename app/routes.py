@@ -5,14 +5,16 @@ from app import app, db
 from app.models import Address
 
 import os
+import time
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         addr = Address(address=request.form['address'])
-        addr.report_folder = os.path.join(app.config['REPORT_FOLDER'], secure_filename(addr.address) + ".pdf")
-        addr.address_folder = os.path.join(app.config['ADDRESS_FOLDER'], secure_filename(addr.address))
+        filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
+        addr.report_folder = os.path.join(app.config['REPORT_FOLDER'], filename + ".pdf")
+        addr.address_folder = os.path.join(app.config['ADDRESS_FOLDER'], filename + ".txt")
 
         txt_file = open(addr.address_folder, "w")
         txt_file.write(addr.address)
