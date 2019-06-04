@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DensifyLA</title>
+
+  <link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/main.css">
+
+</head>
+<body>
+
+  <div class="container">
+
+    <nav class="navbar fixed-top">
+      <h1>DensifyLA</h1>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+
+      {% if messages %}
+        <div id="alertBox">
+        {% for i, msg in enumerate(messages) %}
+        <div class="alert alert-danger alert-custom" id="alert_{{ i }}">
+          <div class="my-auto mx-2">
+            {{ msg }}
+          </div>
+          <button type="button" class="my-auto close">&times;</button>
+        </div>
+        {% endfor %}
+        </div>
+      {% endif %}
+
+    {% endwith %}
+
+    <div class="login-wrapper fadeIn">
+      <div id="formContent">
+        <form class="d-flex flex-column justify-content-center align-items-center"
+              method="post" action="{{ url_for('login') }}">
+          <input type="text" class="fadeIn" name="email" placeholder="Email">
+          <input type="password" class="fadeIn" name="password" placeholder="Password">
+          <button type="submit" class="fadeIn" id="loginButton">Log In</button>
+          <a href="/" id="forgotPassword">Forgot Password?</a>
+          <button type="button" class="fadeIn" id="registerButton">Register</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../static/dist/main.bundle.js"></script>
+
+</body>
+</html>
