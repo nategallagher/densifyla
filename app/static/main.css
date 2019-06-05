@@ -33,6 +33,10 @@ nav.navbar h1 {
   font-family: Georgia, serif;
 }
 
+h1, h2, h3, h4, h5 {
+  font-family: Georgia, serif;
+}
+
 .login-wrapper {
   display: flex;
   flex-direction: column;
@@ -85,35 +89,25 @@ h2.active {
 
 /* FORM TYPOGRAPHY*/
 
-#loginButton  {
+#loginButton, #registerModalButton, #forgotPasswordModalButton  {
   background-color: dodgerblue;
-  border: none;
-  color: white;
-  padding: 15px 80px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 1rem;
   -webkit-box-shadow: 0 5px 15px 0 rgba(95,186,233,0.4);
   box-shadow: 0 5px 15px 0 rgba(95,186,233,0.4);
-  -webkit-border-radius: 5px 5px 5px 5px;
-  border-radius: 5px 5px 5px 5px;
-  margin: 10px 20px 10px 20px;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
 }
 
 #registerButton {
   background-color: lightgrey;
+  -webkit-box-shadow: 0 5px 15px 0 rgba(211,211,211,0.4);
+  box-shadow: 0 5px 15px 0 rgba(211,211,211,0.4);
+}
+
+button{
   border: none;
   color: white;
   padding: 15px 80px;
   text-align: center;
   text-decoration: none;
   font-size: 1rem;
-  -webkit-box-shadow: 0 5px 15px 0 rgba(211,211,211,0.4);
-  box-shadow: 0 5px 15px 0 rgba(211,211,211,0.4);
   -webkit-border-radius: 5px 5px 5px 5px;
   border-radius: 5px 5px 5px 5px;
   margin: 10px 20px 10px 20px;
@@ -139,7 +133,8 @@ button[type=submit]:active  {
   transform: scale(0.95);
 }
 
-input[type=text], input[type=password]{
+input[type=text], input[type=password], input[type=email]{
+  width: 240px;
   background-color: #f6f6f6;
   color: #0d0d0d;
   padding: 15px 32px;
@@ -148,7 +143,6 @@ input[type=text], input[type=password]{
   display: inline-block;
   font-size: 16px;
   margin: 5px;
-  width: 85%;
   border: 2px solid #f6f6f6;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
@@ -158,13 +152,13 @@ input[type=text], input[type=password]{
   border-radius: 5px 5px 5px 5px;
 }
 
-input[type=text]:focus, input[type=password]:focus {
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
   background-color: #fff;
   border-bottom: 2px solid dodgerblue;
 }
 
-input[type=text]::placeholder, input[type=password]::placeholder {
-  color: #cccccc;
+input[type=text]::placeholder, input[type=password]::placeholder, input[type=email]::placeholder {
+  color: #c6c8ca;
 }
 
 /* ANIMATIONS */

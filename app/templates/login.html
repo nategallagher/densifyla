@@ -16,17 +16,26 @@
       <h1>DensifyLA</h1>
     </nav>
 
-    {% with messages = get_flashed_messages() %}
+    {% with flashed_messages = get_flashed_messages(with_categories=True) %}
 
-      {% if messages %}
+      {% if flashed_messages %}
         <div id="alertBox">
-        {% for i, msg in enumerate(messages) %}
-        <div class="alert alert-danger alert-custom" id="alert_{{ i }}">
-          <div class="my-auto mx-2">
-            {{ msg }}
+        {% for i, msg in enumerate(flashed_messages) %}
+          {% if msg[0] == 'message' %}
+          <div class="alert alert-primary alert-custom" id="alert_{{ i }}">
+            <div class="my-auto mx-1">
+              {{ msg[1] }}
+            </div>
+            <a class="mx-1 close" id="alert_close_{{ i }}" href="#">&times;</a>
           </div>
-          <button type="button" class="my-auto close">&times;</button>
-        </div>
+          {% elif msg[0] == 'error' %}
+            <div class="alert alert-danger alert-custom" id="alert_{{ i }}">
+              <div class="my-auto mx-1">
+                {{ msg[1] }}
+              </div>
+              <a class="mx-1 close" id="alert_close_{{ i }}" href="#">&times;</a>
+            </div>
+          {% endif %}
         {% endfor %}
         </div>
       {% endif %}
@@ -37,15 +46,66 @@
       <div id="formContent">
         <form class="d-flex flex-column justify-content-center align-items-center"
               method="post" action="{{ url_for('login') }}">
-          <input type="text" class="fadeIn" name="email" placeholder="Email">
+          {{ login_form.csrf_token }}
+          <input type="email" class="fadeIn" name="email" placeholder="Email">
           <input type="password" class="fadeIn" name="password" placeholder="Password">
           <button type="submit" class="fadeIn" id="loginButton">Log In</button>
-          <a href="/" id="forgotPassword">Forgot Password?</a>
-          <button type="button" class="fadeIn" id="registerButton">Register</button>
+          <a href="/" data-toggle="modal" data-target="#forgotPasswordModal">Forgot Password?</a>
+          <button type="button" class="fadeIn" id="registerButton"
+                  data-toggle="modal" data-target="#registerModal">Register</button>
         </form>
       </div>
     </div>
 
+  </div>
+
+  <!-- Register Modal -->
+  <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="ml-auto" id="exampleModalLongTitle">DensifyLA Registration</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="post" action="{{ url_for('register') }}">
+          {{ register_form.csrf_token }}
+          <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+            <input type="email" name="register_email" id="registerEmail" placeholder="Email">
+            <input type="password" name="register_password" id="registerPassword" placeholder="Password">
+            <input type="password" name="register_password_2" id="registerPassword2" placeholder="Re-enter Password">
+          </div>
+          <div class="modal-footer">
+            <button class="m-auto" type="submit" id="registerModalButton">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- "Forgot password?" Modal -->
+  <div class="modal fade" id="forgotPasswordModal" tabindex="-1"
+       role="dialog" aria-labelledby="forgotPasswordModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="ml-auto">Forgot Password?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="post" action="{{ url_for('forgot_password') }}">
+          {{ forgot_password_form.csrf_token }}
+          <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+            <input type="email" name="forgot_password_email" id="forgotPasswordEmail" placeholder="Email">
+          </div>
+          <div class="modal-footer">
+            <button class="m-auto" type="submit" id="forgotPasswordModalButton">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <script src="../static/dist/main.bundle.js"></script>
