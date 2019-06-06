@@ -20,3 +20,12 @@ class RegisterForm(FlaskForm):
 
 class ForgotPasswordForm(FlaskForm):
     forgot_password_email = StringField(validators=[Email(), DataRequired(), Length(min=3, max=25)])
+
+
+class ResetPasswordForm(FlaskForm):
+    reset_password = PasswordField(validators=[Length(min=8, max=32), DataRequired()])
+    reset_password_2 = PasswordField(validators=[Length(min=8, max=32), DataRequired()])
+
+    def validate_reset_password_2(self, reset_password_2):
+        if self.reset_password.data != reset_password_2.data:
+            raise ValidationError("Passwords were not equal. Password reset failed. Please try again.")

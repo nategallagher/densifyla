@@ -15,13 +15,9 @@
   <div class="d-flex flex-column justify-content-center align-items-center">
     <h1>Welcome to Densify LA</h1>
 
-    <button type="button" class="btn-outline-primary">
-      LogIn
-    </button>
-    <div>or</div>
-    <button type="button" class="btn-outline-dark">
-      Register
-    </button>
+    <a type="button" class="btn-outline-primary" href="{{ url_for('logout') }}">
+      Log Out
+    </a>
 
     <form class="mb-2" method="post" action="/">
       <div class="d-inline-flex">

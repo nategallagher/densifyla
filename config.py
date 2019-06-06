@@ -11,4 +11,8 @@ class Config:
     ADDRESS_FOLDER = os.environ.get('ADDRESS_FOLDER') or os.path.abspath("./addresses")
     REPORT_FOLDER = os.environ.get('REPORT_FOLDER') or os.path.abspath("./reports")
 
-
+    MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'localhost'
+    MAIL_PORT = os.environ.get('MAIL_PORT') or 3333
+    # MAIL_USE_TLS = True
+    # MAIL_USERNAME = os.environ.get('MAIL_USER')
+    # MAIL_PASSWORD = os.environ.get('MAIL_PASS')

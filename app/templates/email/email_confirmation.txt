@@ -1,0 +1,5 @@
+DensifyLA
+
+Please go to this url to confirm your email address: {{ email_confirmation_link }}
+
+Welcome to DensifyLA!

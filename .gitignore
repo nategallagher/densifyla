@@ -5,6 +5,9 @@ __pycache__/
 app/__pycache__/
 app/static/node_modules/
 
+app/static/dist/
+migrations/
+
 addresses/
 reports/
 app.db

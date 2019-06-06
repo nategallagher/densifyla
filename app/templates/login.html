@@ -12,10 +12,6 @@
 
   <div class="container">
 
-    <nav class="navbar fixed-top">
-      <h1>DensifyLA</h1>
-    </nav>
-
     {% with flashed_messages = get_flashed_messages(with_categories=True) %}
 
       {% if flashed_messages %}
@@ -39,8 +35,12 @@
         {% endfor %}
         </div>
       {% endif %}
-
     {% endwith %}
+
+  {% block content %}
+    <nav class="navbar fixed-top">
+      <h1>DensifyLA</h1>
+    </nav>
 
     <div class="login-wrapper fadeIn">
       <div id="formContent">
@@ -56,9 +56,10 @@
         </form>
       </div>
     </div>
-
+  {% endblock content %}
   </div>
 
+  {% block modals %}
   <!-- Register Modal -->
   <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -107,6 +108,7 @@
       </div>
     </div>
   </div>
+  {% endblock modals %}
 
   <script src="../static/dist/main.bundle.js"></script>
 
