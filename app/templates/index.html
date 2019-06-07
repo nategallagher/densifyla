@@ -6,85 +6,96 @@
 
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
         integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-  <link rel="stylesheet" href="../static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="../static/main.css">
 
 </head>
 <body>
 
-  <div class="d-flex flex-column justify-content-center align-items-center">
-    <h1>Welcome to Densify LA</h1>
-
-    <a type="button" class="btn-outline-primary" href="{{ url_for('logout') }}">
-      Log Out
-    </a>
-
-    <form class="mb-2" method="post" action="/">
-      <div class="d-inline-flex">
-        <label class="mx-1 my-auto" for="address">Enter address & </label>
-        <input class="mx-1 my-auto" type="text" name="address" id="address">
-        <button class="btn btn-sm btn-outline-primary mx-1 my-auto" type="submit">Go!</button>
+  <div class="login-status-bar">
+    {% if current_user.is_authenticated %}
+      <div>
+        <i>You are logged in as {{ current_user.email }}</i>
+        <a href="{{ url_for('logout') }}">Logout</a>
       </div>
-    </form>
-    <img class="mb-2" src="../static/images/Los+Angeles+Wallpapers+3.jpg"
-         style="height: 250px; width: auto; display: none">
+    {% else %}
+      <div>
+        <i>Public User</i>
+        <a href="{{ url_for('login') }}">Login or Register</a>
+      </div>
+    {% endif %}
+  </div>
 
-    <table class="table table-striped w-50">
-      <tr>
-        <th>Address</th>
-        <th>Date Entered</th>
-        <th>Actions</th>
-      </tr>
-      {% for addr in page_object.items %}
-      <tr>
-        <td>
-          {{ addr.address }}
-        </td>
-        <td>
-          {{ addr.date }}
-        </td>
-        <td>
-          <a href="/download/{{ addr.report_folder.split("\\")[-1] }}">Download</a>
-          <a href="/delete/{{ addr.id }}">Delete</a>
-        </td>
-      </tr>
-      {% endfor %}
-      <tfoot>
+  <div class="container">
+    <div class="d-flex flex-column justify-content-center align-items-center">
+
+      <h1>Welcome to Densify LA</h1>
+
+      <form class="mb-2" method="post" action="/">
+        <div class="d-inline-flex">
+          <label class="mx-1 my-auto" for="address">Enter address & </label>
+          <input class="mx-1 my-auto" type="text" name="address" id="address">
+          <button class="btn btn-sm btn-outline-primary mx-1 my-auto" type="submit">Go!</button>
+        </div>
+      </form>
+
+      <table class="table table-striped w-50">
+        <tr>
+          <th>Address</th>
+          <th>Date Entered</th>
+          <th>Actions</th>
+        </tr>
+        {% for addr in page_object.items %}
         <tr>
           <td>
-            <a href="{{ "/?page=1" if page_object.pages }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to beginning">
-              <i class="fa fa-fast-backward my-auto mx-1" aria-hidden="true"></i>
-            </a>
-            <a href="{{ "/?page={}".format(page_object.page - 1) if page_object.has_prev }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to previous page">
-              <i class="fa fa-step-backward my-auto mx-1" aria-hidden="true"></i>
-            </a>
+            {{ addr.address }}
           </td>
           <td>
-            <div class="d-flex justify-content-center align-items-center">
-              Page {{ page_object.page if page_object.pages else 0 }} of {{ page_object.pages }}. {{ page_object.total }} items total.
-            </div>
+            {{ addr.date }}
           </td>
           <td>
-            <div class="d-flex w-100 justify-content-between">
-              <div></div>
-              <div>
-                <a href="{{ "/?page={}".format(page_object.page + 1) if page_object.has_next }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to next page">
-                  <i class="fa fa-step-forward my-auto mx-1" aria-hidden="true" ></i>
-                </a>
-                <a href="{{ "/?page={}".format(page_object.pages) if page_object.pages }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to end">
-                  <i class="fa fa-fast-forward my-auto mx-1" aria-hidden="true"></i>
-                </a>
-              </div>
-            </div>
+            <a href="/download/{{ addr.report_path.split("\\")[-1] }}">Download</a>
+            <a href="/delete/{{ addr.id }}">Delete</a>
           </td>
         </tr>
-      </tfoot>
+        {% endfor %}
+        <tfoot>
+          <tr>
+            <td>
+              <a href="{{ "/?page=1" if page_object.pages }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to beginning">
+                <i class="fa fa-fast-backward my-auto mx-1" aria-hidden="true"></i>
+              </a>
+              <a href="{{ "/?page={}".format(page_object.page - 1) if page_object.has_prev }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to previous page">
+                <i class="fa fa-step-backward my-auto mx-1" aria-hidden="true"></i>
+              </a>
+            </td>
+            <td>
+              <div class="d-flex justify-content-center align-items-center">
+                Page {{ page_object.page if page_object.pages else 0 }} of {{ page_object.pages }}. {{ page_object.total }} items total.
+              </div>
+            </td>
+            <td>
+              <div class="d-flex w-100 justify-content-between">
+                <div></div>
+                <div>
+                  <a href="{{ "/?page={}".format(page_object.page + 1) if page_object.has_next }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to next page">
+                    <i class="fa fa-step-forward my-auto mx-1" aria-hidden="true" ></i>
+                  </a>
+                  <a href="{{ "/?page={}".format(page_object.pages) if page_object.pages }}" class="disable-link-colors" data-toggle="tooltip" data-placement="bottom" title="Go to end">
+                    <i class="fa fa-fast-forward my-auto mx-1" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
 
-    </table>
+      </table>
 
-    <footer class="my-3">
-      &copy; 2019
-    </footer>
+      <footer class="my-3">
+        &copy; 2019
+      </footer>
+    </div>
   </div>
   <script src="../static/bootstrap-4.3.1-dist/js/bootstrap.bundle.js"></script>
 

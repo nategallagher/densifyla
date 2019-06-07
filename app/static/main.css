@@ -133,7 +133,7 @@ button[type=submit]:active  {
   transform: scale(0.95);
 }
 
-input[type=text], input[type=password], input[type=email]{
+input[type=text].login-style, input[type=password].login-style, input[type=email].login-style{
   width: 240px;
   background-color: #f6f6f6;
   color: #0d0d0d;
@@ -152,12 +152,13 @@ input[type=text], input[type=password], input[type=email]{
   border-radius: 5px 5px 5px 5px;
 }
 
-input[type=text]:focus, input[type=password]:focus, input[type=email]:focus {
+input[type=text]:focus.login-style, input[type=password]:focus.login-style, input[type=email]:focus.login-style {
   background-color: #fff;
   border-bottom: 2px solid dodgerblue;
 }
 
-input[type=text]::placeholder, input[type=password]::placeholder, input[type=email]::placeholder {
+input[type=text]::placeholder.login-style,
+  input[type=password]::placeholder.login-style, input[type=email]::placeholder.login-style {
   color: #c6c8ca;
 }
 
@@ -282,4 +283,33 @@ input[type=text]::placeholder, input[type=password]::placeholder, input[type=ema
 
   padding: 2px 5px;
   text-align: center;
+}
+
+.logout-link {
+  position: absolute;
+  right: 50px;
+  top: 10px;
+}
+
+div.login-status-bar{
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 25px;
+  background-color: rgba(50,205,50,0.75);
+  border-bottom: green;
+  border-bottom-width: 1px;
+}
+
+div.login-status-bar div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px;
+  color: white;
+  font-family: Georgia, serif;
+}
+
+.container {
+  position: relative;
+  top: 25px;
 }

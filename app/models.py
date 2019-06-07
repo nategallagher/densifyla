@@ -21,8 +21,8 @@ class Address(db.Model):
     address = db.Column(db.String(140), nullable=False)
     date = db.Column(db.DateTime, index=True, default=datetime.utcnow())
 
-    report_folder = db.Column(db.String(140), unique=True)
-    address_folder = db.Column(db.String(140))
+    report_path = db.Column(db.String(140), unique=True)
+    address_path = db.Column(db.String(140), unique=True)
 
     def __repr__(self):
         return '<Address_{}>'.format(self.address)

@@ -11,3 +11,4 @@ migrations/
 addresses/
 reports/
 app.db
+logs/
