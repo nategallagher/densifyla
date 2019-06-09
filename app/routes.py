@@ -19,7 +19,6 @@ def index():
     if current_user.is_authenticated:
         if request.method == 'POST':
             addr = Address(address=request.form['address'], user_id=current_user.id)
-            app.logger.info('user id is {}'.format(current_user.id))
 
             filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
 
@@ -55,8 +54,20 @@ def index():
     else:
         if request.method == 'POST':
             addr = Address(address=request.form['address'])
-            addr.report_path = os.path.join(app.config['REPORT_FOLDER'], secure_filename(addr.address) + ".pdf")
-            addr.address_path = os.path.join(app.config['ADDRESS_FOLDER'], secure_filename(addr.address) + ".txt")
+            
+            filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
+            
+            addr.report_path = os.path.join(app.config['REPORT_FOLDER'], filename + ".pdf")
+
+            report_folder = os.path.split(addr.report_path)[0]
+            if not os.path.exists(report_folder):
+                os.makedirs(report_folder)
+
+            addr.address_path = os.path.join(app.config['ADDRESS_FOLDER'], filename + ".txt")
+
+            address_folder = os.path.split(addr.address_path)[0]
+            if not os.path.exists(address_folder):
+                os.makedirs(address_folder)
 
             txt_file = open(addr.address_path, "w")
             txt_file.write(addr.address)
