@@ -20,15 +20,18 @@ def index():
         if request.method == 'POST':
             addr = Address(address=request.form['address'], user_id=current_user.id)
             app.logger.info('user id is {}'.format(current_user.id))
+
+            filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
+
             addr.report_path = os.path.join(app.config['REPORT_FOLDER'], str(current_user.id),
-                                            secure_filename(addr.address) + ".pdf")
+                                             filename + ".pdf")
 
             report_folder = os.path.split(addr.report_path)[0]
             if not os.path.exists(report_folder):
                 os.makedirs(report_folder)
 
             addr.address_path = os.path.join(app.config['ADDRESS_FOLDER'], str(current_user.id),
-                                             secure_filename(addr.address) + ".txt")
+                                             filename + ".txt")
 
             address_folder = os.path.split(addr.address_path)[0]
             if not os.path.exists(address_folder):
