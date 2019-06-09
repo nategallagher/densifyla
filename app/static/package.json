@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "npx webpack --config dev.config.js --watch",
-    "build": "npx webpack --config dev.config.js"
+    "build": "npx webpack --config prod.config.js"
   },
   "author": "",
   "license": "ISC",
