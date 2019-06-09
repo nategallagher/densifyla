@@ -6,7 +6,6 @@ app/__pycache__/
 app/static/node_modules/
 
 app/static/dist/
-migrations/
 
 addresses/
 reports/
