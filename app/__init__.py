@@ -2,13 +2,9 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_migrate import Migrate
-<<<<<<< HEAD
 from flask_sqlalchemy import SQLAlchemy
 
-from config import Config
-=======
-from config import Production
->>>>>>> origin/v0.0
+from config import Config, Production
 
 import os
 import logging
