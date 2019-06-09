@@ -11,10 +11,12 @@ from app.forms import LoginForm, ForgotPasswordForm, RegisterForm, ResetPassword
 from app.email import send_mail_thread
 
 import os
+import time
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+<<<<<<< HEAD
     if current_user.is_authenticated:
         if request.method == 'POST':
             addr = Address(address=request.form['address'], user_id=current_user.id)
@@ -44,6 +46,13 @@ def index():
 
             db.session.add(addr)
             db.session.commit()
+=======
+    if request.method == 'POST':
+        addr = Address(address=request.form['address'])
+        filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
+        addr.report_folder = os.path.join(app.config['REPORT_FOLDER'], filename + ".pdf")
+        addr.address_folder = os.path.join(app.config['ADDRESS_FOLDER'], filename + ".txt")
+>>>>>>> origin/v0.0
 
         page = int(request.args.get('page', 1))
         page_object = Address().query.filter_by(user_id=current_user.id).paginate(max_per_page=10, page=page)

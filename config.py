@@ -17,4 +17,12 @@ class Config:
     # MAIL_USERNAME = os.environ.get('MAIL_USER')
     # MAIL_PASSWORD = os.environ.get('MAIL_PASS')
 
+<<<<<<< HEAD
     # MAIL_SUPPRESS_SEND = True  # for now until we get legit mail server
+=======
+class Production(Config):
+	DEBUG = False
+	
+	SECRET_KEY = b'\t\xcb\xe1\x95\xc9Q\x81(\xfeX\x95\xac,\xc0"Khk\x03\xc3\xed;\xeaI'
+	SQLALCHEMY_DATABASE_URI = 'postgresql://densifyla:densifyla@localhost:5432/densifyla'
+>>>>>>> origin/v0.0

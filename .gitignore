@@ -1,10 +1,11 @@
-.flaskenv
 .idea/
+.vs/
 venv/
 __pycache__/
 app/__pycache__/
 app/static/node_modules/
 
+<<<<<<< HEAD
 app/static/dist/
 migrations/
 
@@ -12,3 +13,8 @@ addresses/
 reports/
 app.db
 logs/
+=======
+addresses/
+reports/
+
+>>>>>>> origin/v0.0
