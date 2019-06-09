@@ -16,73 +16,40 @@ import time
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if current_user.is_authenticated:
-        if request.method == 'POST':
-            addr = Address(address=request.form['address'], user_id=current_user.id)
+    user_id = current_user.id if current_user.is_authenticated else 0
+    if request.method == 'POST':
+        addr = Address(address=request.form['address'], user_id=user_id)
 
-            filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
+        filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
 
-            addr.report_path = os.path.join(app.config['REPORT_FOLDER'], str(current_user.id),
-                                             filename + ".pdf")
+        addr.report_path = os.path.join(app.config['REPORT_FOLDER'], str(user_id),
+                                            filename + ".pdf")
 
-            report_folder = os.path.split(addr.report_path)[0]
-            if not os.path.exists(report_folder):
-                os.makedirs(report_folder)
+        report_folder = os.path.split(addr.report_path)[0]
+        if not os.path.exists(report_folder):
+            os.makedirs(report_folder)
 
-            addr.address_path = os.path.join(app.config['ADDRESS_FOLDER'], str(current_user.id),
-                                             filename + ".txt")
+        addr.address_path = os.path.join(app.config['ADDRESS_FOLDER'], str(user_id),
+                                            filename + ".txt")
 
-            address_folder = os.path.split(addr.address_path)[0]
-            if not os.path.exists(address_folder):
-                os.makedirs(address_folder)
+        address_folder = os.path.split(addr.address_path)[0]
+        if not os.path.exists(address_folder):
+            os.makedirs(address_folder)
 
-            txt_file = open(addr.address_path, "w")
-            txt_file.write(addr.address)
-            txt_file.close()
+        txt_file = open(addr.address_path, "w")
+        txt_file.write(addr.address)
+        txt_file.close()
 
-            if app.config['DEBUG']:
-                pdf_file = open(addr.report_path, "w")
-                pdf_file.write(addr.address)
-                pdf_file.close()
+        if app.config['DEBUG']:
+            pdf_file = open(addr.report_path, "w")
+            pdf_file.write(addr.address)
+            pdf_file.close()
 
-            db.session.add(addr)
-            db.session.commit()
+        db.session.add(addr)
+        db.session.commit()
 
-        page = int(request.args.get('page', 1))
-        page_object = Address().query.filter_by(user_id=current_user.id).paginate(max_per_page=10, page=page)
-
-    else:
-        if request.method == 'POST':
-            addr = Address(address=request.form['address'])
-            
-            filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
-            
-            addr.report_path = os.path.join(app.config['REPORT_FOLDER'], filename + ".pdf")
-
-            report_folder = os.path.split(addr.report_path)[0]
-            if not os.path.exists(report_folder):
-                os.makedirs(report_folder)
-
-            addr.address_path = os.path.join(app.config['ADDRESS_FOLDER'], filename + ".txt")
-
-            address_folder = os.path.split(addr.address_path)[0]
-            if not os.path.exists(address_folder):
-                os.makedirs(address_folder)
-
-            txt_file = open(addr.address_path, "w")
-            txt_file.write(addr.address)
-            txt_file.close()
-
-            if app.config['DEBUG']:
-                pdf_file = open(addr.report_path, "w")
-                pdf_file.write(addr.address)
-                pdf_file.close()
-
-            db.session.add(addr)
-            db.session.commit()
-
-        page = int(request.args.get('page', 1))
-        page_object = Address().query.filter_by(user_id=None).paginate(max_per_page=10, page=page)
+    page = int(request.args.get('page', 1))
+    page_object = Address().query.filter_by(user_id=user_id).paginate(max_per_page=10, page=page)
 
     return render_template("index.html", page_object=page_object)
 
@@ -113,9 +80,9 @@ def login():
                            register_form=RegisterForm())
 
 
-@app.route('/download/<file>')
-def download(file):
-    return send_from_directory(app.config['REPORT_FOLDER'], file)
+@app.route('/download/<user_id>/<file>')
+def download(user_id, file):
+    return send_from_directory(os.path.join(app.config['REPORT_FOLDER'], user_id), file)
 
 
 @app.route('/delete/<address_id>')
