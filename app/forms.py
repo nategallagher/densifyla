@@ -4,14 +4,14 @@ from wtforms.validators import Email, DataRequired, Length, ValidationError
 
 
 class LoginForm(FlaskForm):
-    email = StringField(validators=[Email(), DataRequired(), Length(min=3, max=25)])
-    password = PasswordField(validators=[Length(min=8, max=32), DataRequired()])
+    email = StringField(validators=[Email(), DataRequired(), Length(min=3, max=140)])
+    password = PasswordField(validators=[Length(min=8, max=128), DataRequired()])
 
 
 class RegisterForm(FlaskForm):
-    register_email = StringField(validators=[Email(), DataRequired(), Length(min=3, max=25)])
-    register_password = PasswordField(validators=[Length(min=8, max=32), DataRequired()])
-    register_password_2 = PasswordField(validators=[Length(min=8, max=32), DataRequired()])
+    register_email = StringField(validators=[Email(), DataRequired(), Length(min=3, max=140)])
+    register_password = PasswordField(validators=[Length(min=8, max=128), DataRequired()])
+    register_password_2 = PasswordField(validators=[Length(min=8, max=128), DataRequired()])
 
     def validate_register_password_2(self, register_password_2):
         if self.register_password.data != register_password_2.data:
@@ -19,12 +19,12 @@ class RegisterForm(FlaskForm):
 
 
 class ForgotPasswordForm(FlaskForm):
-    forgot_password_email = StringField(validators=[Email(), DataRequired(), Length(min=3, max=25)])
+    forgot_password_email = StringField(validators=[Email(), DataRequired(), Length(min=3, max=140)])
 
 
 class ResetPasswordForm(FlaskForm):
-    reset_password = PasswordField(validators=[Length(min=8, max=32), DataRequired()])
-    reset_password_2 = PasswordField(validators=[Length(min=8, max=32), DataRequired()])
+    reset_password = PasswordField(validators=[Length(min=8, max=128), DataRequired()])
+    reset_password_2 = PasswordField(validators=[Length(min=8, max=128), DataRequired()])
 
     def validate_reset_password_2(self, reset_password_2):
         if self.reset_password.data != reset_password_2.data:
