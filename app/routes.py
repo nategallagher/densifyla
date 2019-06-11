@@ -12,13 +12,14 @@ from app.email import send_mail_thread
 
 import os
 import time
+from datetime import datetime
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     user_id = current_user.id if current_user.is_authenticated else 0
     if request.method == 'POST':
-        addr = Address(address=request.form['address'], user_id=user_id)
+        addr = Address(address=request.form['address'], user_id=user_id, date=datetime.utcnow())
 
         filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
 
@@ -49,7 +50,7 @@ def index():
         db.session.commit()
 
     page = int(request.args.get('page', 1))
-    page_object = Address().query.filter_by(user_id=user_id).paginate(max_per_page=10, page=page)
+    page_object = Address().query.filter_by(user_id=user_id).order_by(Address.date.desc()).paginate(max_per_page=10, page=page)
 
     return render_template("index.html", page_object=page_object)
 
