@@ -26,7 +26,7 @@ if not os.path.exists(app.config['ADDRESS_FOLDER']):
 if not os.path.exists(app.config['REPORT_FOLDER']):
     os.mkdir(app.config['REPORT_FOLDER'])
 
-from app import routes, models
+from app import routes, models, errors
 
 if not app.debug:
     if not os.path.exists('logs/'):

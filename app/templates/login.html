@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>DensifyLA</title>
-
-  <link rel="stylesheet" href="../static/node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../static/main.css">
-
-</head>
+{% extends "index.html" %}
+{% block body %}
 <body>
 
   <div class="container">
@@ -81,8 +73,9 @@
             <input class="login-style" type="password" name="register_password" id="registerPassword" placeholder="Password">
             <input class="login-style" type="password" name="register_password_2" id="registerPassword2" placeholder="Re-enter Password">
           </div>
-          <div class="modal-footer">
-            <button class="m-auto" type="submit" id="registerModalButton">Register</button>
+          <div class="modal-footer d-flex flex-column justify-content-center align-items-center">
+            <div class="g-recaptcha m-1" data-sitekey="6Lf8kKgUAAAAAAFxp9X6YIXKIttq8f81UjeXzmre"></div>
+            <button class="m-1" type="submit" id="registerModalButton">Register</button>
           </div>
         </form>
       </div>
@@ -114,7 +107,10 @@
   </div>
   {% endblock modals %}
 
-  <script src="../static/dist/main.bundle.js"></script>
+  {% block scripts %}
+    <script src="{{ url_for('static', filename='dist/main.bundle.js') }}"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  {% endblock scripts %}
 
 </body>
-</html>
+{% endblock body %}

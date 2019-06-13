@@ -1,6 +1,6 @@
 from flask import request, render_template, send_from_directory, \
-    redirect, flash, Markup, url_for, abort
-from flask_login import login_user, current_user, logout_user
+    redirect, flash, Markup, url_for, abort, jsonify
+from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 from sqlalchemy.exc import IntegrityError
 from werkzeug.utils import secure_filename
@@ -17,6 +17,9 @@ from datetime import datetime
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    if not current_user.is_authenticated:
+        login_user(User.query.get(0))
+    sort_by = request.args.get('sort_by', 'desc')
     user_id = current_user.id if current_user.is_authenticated else 0
     if request.method == 'POST':
         addr = Address(address=request.form['address'], user_id=user_id, date=datetime.utcnow())
@@ -24,14 +27,14 @@ def index():
         filename = str(int(time.time() * 1000)) + "_" + secure_filename(addr.address)
 
         addr.report_path = os.path.join(app.config['REPORT_FOLDER'], str(user_id),
-                                            filename + ".pdf")
+                                        filename + ".pdf")
 
         report_folder = os.path.split(addr.report_path)[0]
         if not os.path.exists(report_folder):
             os.makedirs(report_folder)
 
         addr.address_path = os.path.join(app.config['ADDRESS_FOLDER'], str(user_id),
-                                            filename + ".txt")
+                                         filename + ".txt")
 
         address_folder = os.path.split(addr.address_path)[0]
         if not os.path.exists(address_folder):
@@ -41,18 +44,17 @@ def index():
         txt_file.write(addr.address)
         txt_file.close()
 
-        if app.config['DEBUG']:
-            pdf_file = open(addr.report_path, "w")
-            pdf_file.write(addr.address)
-            pdf_file.close()
-
         db.session.add(addr)
         db.session.commit()
 
     page = int(request.args.get('page', 1))
-    page_object = Address().query.filter_by(user_id=user_id).order_by(Address.date.desc()).paginate(max_per_page=10, page=page)
+    if sort_by == 'asc':
+        order = Address.date.asc()
+    else:
+        order = Address.date.desc()
+    page_object = Address().query.filter_by(user_id=user_id).order_by(order).paginate(max_per_page=10, page=page)
 
-    return render_template("index.html", page_object=page_object)
+    return render_template("index.html", page_object=page_object, sort_by=sort_by)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -81,9 +83,35 @@ def login():
                            register_form=RegisterForm())
 
 
+@login_required
 @app.route('/download/<user_id>/<file>')
 def download(user_id, file):
+    if user_id != current_user.id:
+        return abort(401)
     return send_from_directory(os.path.join(app.config['REPORT_FOLDER'], user_id), file)
+
+
+# @login_required
+@app.route('/reports/<user_id>/<file>')
+def reports(user_id, file):
+    """
+    API endpoint for status of report generation
+    Args:
+         user_id: User id
+         file: File
+    Returns:
+        JSON object indicating report status and details
+    """
+    # if user_id != current_user.id:
+    #     return abort(401)
+    file = file.split('.')[0]   # remove extension
+    report_abs_path = os.path.join(app.config['REPORT_FOLDER'], user_id, file + ".pdf")
+    address_abs_path = os.path.join(app.config['ADDRESS_FOLDER'], user_id, file + ".txt")
+    response = {
+        'address_file_exists': os.path.isfile(address_abs_path),
+        'report_file_exists': os.path.isfile(report_abs_path),
+    }
+    return jsonify(response)
 
 
 @app.route('/delete/<address_id>')
@@ -110,6 +138,9 @@ def register():
             for field_name, error_msg in register_form.errors.items():
                 flash("{}: {}".format(field_name, error_msg), "error")
         else:
+            # verify captcha
+            captcha = request.form['g-recaptcha-response']
+            # todo: verify token
             new_user = User()
             new_user.email = request.form['register_email']
             new_user.set_password(request.form['register_password'])
