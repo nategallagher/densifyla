@@ -86,14 +86,14 @@ def login():
 @login_required
 @app.route('/download/<user_id>/<file>')
 def download(user_id, file):
-    if user_id != current_user.id:
+    if int(user_id) != current_user.id:
         return abort(401)
     return send_from_directory(os.path.join(app.config['REPORT_FOLDER'], user_id), file)
 
 
 # @login_required
-@app.route('/reports/<user_id>/<file>')
-def reports(user_id, file):
+@app.route('/reports/<user_id>/<filename>')
+def reports(user_id, filename):
     """
     API endpoint for status of report generation
     Args:
@@ -104,9 +104,9 @@ def reports(user_id, file):
     """
     # if user_id != current_user.id:
     #     return abort(401)
-    file = file.split('.')[0]   # remove extension
-    report_abs_path = os.path.join(app.config['REPORT_FOLDER'], user_id, file + ".pdf")
-    address_abs_path = os.path.join(app.config['ADDRESS_FOLDER'], user_id, file + ".txt")
+    filename = filename.split('.')[0]   # remove extension
+    report_abs_path = os.path.join(app.config['REPORT_FOLDER'], user_id, filename + ".pdf")
+    address_abs_path = os.path.join(app.config['ADDRESS_FOLDER'], user_id, filename + ".txt")
     response = {
         'address_file_exists': os.path.isfile(address_abs_path),
         'report_file_exists': os.path.isfile(report_abs_path),
@@ -117,6 +117,8 @@ def reports(user_id, file):
 @app.route('/delete/<address_id>')
 def delete(address_id):
     addr = Address().query.filter_by(id=address_id).first()
+    if current_user.id != addr.user_id:
+        return abort(401)
     try:
         os.remove(addr.address_path)
     except FileNotFoundError:
